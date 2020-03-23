@@ -1,89 +1,91 @@
 class Node {
-  constructor(value, linkToNext = null) {
-    this.value = value,
-    this.linkToNext = linkToNext
+  constructor(value, next = null) {
+    (this.value = value), (this.next = next);
   }
 }
 
 class LinkedList {
-  constructor() {
-    this.head = null;
+  constructor(value) {
+    this.head = {
+      value,
+      next: null
+    };
   }
-}
 
-LinkedList.prototype.addToHead = value => {
-  const node = new Node(value, this.head);
-  this.head = node;
+  addToHead(value) {
+    const node = new Node(value);
+    this.head.next = node;
 
-  return this.head;
-}
+    return this;
+  }
 
-LinkedList.prototype.addToLast = value => {
-  const node = new Node(value);
-  this.head = node;
-
-  if (!this.head) {
+  addToLast(value) {
+    const node = new Node(value);
     this.head = node;
-  }
 
-  const lastNode = this.head;
-
-  while(lastNode.linkToNext) {
-    this.lastNode = this.lastNode.linkToNext;
-  }
-
-  lastNode.linkToNext = node;
-
-  return this.head;
-}
-
-LinkedList.prototype.getAtIndex = index => {
-  let counter = 0;
-  let node = this.head;
-
-  while(node) {
-    if (counter === index) {
-      return node;
+    if (!this.head) {
+      this.head = node;
     }
 
-    node = node.linkToNext;
-    counter ++;
+    const lastNode = this.head;
+
+    while (lastNode.next) {
+      this.lastNode = this.lastNode.next;
+    }
+
+    lastNode.next = node;
+
+    return this;
   }
 
-  return null;
-}
+  getAtIndex(index) {
+    let counter = 0;
+    let node = this.head;
 
-LinkedList.prototype.addAtIndex = (value, index) => {
-  if (index === 0) {
-    this.addToHead(value);
+    while (node) {
+      if (counter === index) {
+        return node;
+      }
 
-    return this.head;
+      node = node.next;
+      counter++;
+    }
+
+    return null;
   }
 
-  const previousNode = this.getAtIndex(index - 1);
-  const nextNode = this.getAtIndex(index);
-  const newNode = new Node(value);
-  previousNode.linkToNext = newNode;
-  newNode.linkToNext = nextNode;
+  addAtIndex(value, index) {
+    if (index === 0) {
+      this.addToHead(value);
 
-  return this.head;
-}
+      return this;
+    }
 
-LinkedList.prototype.removeHead = () => {
-  this.head = this.head.linkToNext;
-  return this.head;
-}
+    const previousNode = this.getAtIndex(index - 1);
+    const nextNode = this.getAtIndex(index);
+    const newNode = new Node(value);
+    previousNode.next = newNode;
+    newNode.next = nextNode;
 
-LinkedList.prototype.removeAtIndex = index => {
-  if (index === 0) {
-    this.removeHead();
-
-    return this.head;
+    return this;
   }
 
-  const parentOfNodeToRemove = this.getAtIndex(index - 1);
-  const childOfNodeToRemove = this.getAtIndex(index + 1);
-  parentOfNodeToRemove.linkToNext = childOfNodeToRemove;
+  removeHead() {
+    this.head = this.head.next;
+    return this;
+  }
 
-  return this.head;
+  removeAtIndex(index) {
+    if (index === 0) {
+      this.removeHead();
+
+      return this;
+    }
+
+    const parentOfNodeToRemove = this.getAtIndex(index - 1);
+    const childOfNodeToRemove = this.getAtIndex(index + 1);
+    parentOfNodeToRemove.next = childOfNodeToRemove;
+
+    return this;
+  };
 }
